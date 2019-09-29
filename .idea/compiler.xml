@@ -17,9 +17,11 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="mouth-server" />
+        <module name="BigMouth" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
+      <module name="BigMouth" target="1.8" />
       <module name="mouth-server" target="1.8" />
     </bytecodeTargetLevel>
   </component>
