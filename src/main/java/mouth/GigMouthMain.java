@@ -1,6 +1,8 @@
 package mouth;
 
 import javafx.application.Application;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.concurrent.Task;
 import javafx.concurrent.WorkerStateEvent;
 import javafx.event.ActionEvent;
@@ -21,6 +23,7 @@ import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import sample.ThreadMain;
 
 import java.io.File;
 import java.util.Objects;
@@ -178,6 +181,8 @@ public class GigMouthMain extends Application {
                 }
             });
 
+            startBackStageThread();
+
             // 设置组件大小
             Scene scene = new Scene(pane, VIEW_WIDTH, VIEW_HEIGHT);
             stage.setScene(scene);
@@ -188,6 +193,22 @@ public class GigMouthMain extends Application {
             e.printStackTrace();
         }
 
+    }
+
+    private void startBackStageThread() {
+        BackStageThread backStageThread = new BackStageThread();
+        backStageThread.runningProperty().addListener(new ChangeListener<Boolean>() {
+            @Override
+            public void changed(ObservableValue<? extends Boolean> ov, Boolean wasRunning, Boolean isRunning) {
+//                if (!isRunning) {
+//
+//                }
+            }
+        });
+
+        final Thread thread = new Thread(backStageThread, "backStageThread");
+        thread.setDaemon(true);
+        thread.start();
     }
 
     public static void main(String[] args) {
