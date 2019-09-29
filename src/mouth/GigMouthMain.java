@@ -1,7 +1,6 @@
 package mouth;
 
 import javafx.application.Application;
-import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.concurrent.WorkerStateEvent;
 import javafx.event.ActionEvent;
@@ -18,9 +17,13 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.StackPane;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import javafx.stage.WindowEvent;
+
+import java.io.File;
+import java.util.Objects;
 
 public class GigMouthMain extends Application {
 
@@ -29,6 +32,8 @@ public class GigMouthMain extends Application {
 
     private double xOffSet = 0;
     private double yOffSet = 0;
+
+    private String classPath = Objects.requireNonNull(this.getClass().getClassLoader().getResource("")).getPath();
 
     @Override
     public void start(Stage stage) {
@@ -68,8 +73,14 @@ public class GigMouthMain extends Application {
                 @Override
                 public void handle(ActionEvent event) {
                     String menuText = ((MenuItem) event.getTarget()).getText();
-                    if("吐槽一下".equals(menuText)) {
+                    if ("吐槽一下".equals(menuText)) {
 
+                    } else if ("叮咚".equals(menuText)) {
+                        // 设置声音文件，用于播放提醒
+                        String soundStr = classPath + "dingDong.mp3";
+                        Media sound = new Media(new File(soundStr).toURI().toString());
+                        MediaPlayer mediaPlayer = new MediaPlayer(sound);
+                        mediaPlayer.play();
                     } else {
                         imageView.setImage(new Image("file:C:\\Users\\86186\\Desktop\\牛栏山\\BigMouth\\sleep.gif"));
 
@@ -77,19 +88,14 @@ public class GigMouthMain extends Application {
                             @Override
                             protected Void call() {
                                 try {
-                                    Thread.sleep(2000);
+                                    Thread.sleep(1200);
                                 } catch (InterruptedException e) {
                                     e.printStackTrace();
                                 }
                                 return null;
                             }
                         };
-                        sleeper.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
-                            @Override
-                            public void handle(WorkerStateEvent event) {
-                                System.exit(0);
-                            }
-                        });
+                        sleeper.setOnSucceeded(event1 -> System.exit(0));
                         new Thread(sleeper).start();
                     }
                     System.out.println("right gets consumed so this must be left on " +
@@ -98,8 +104,10 @@ public class GigMouthMain extends Application {
             });
 
             MenuItem letterItem = new MenuItem("吐槽一下");
+            MenuItem voiceItem = new MenuItem("叮咚");
             MenuItem quitItem = new MenuItem("退出");
-            clickMenu.getItems().addAll(letterItem, quitItem);
+            clickMenu.getItems().addAll(letterItem, voiceItem, quitItem);
+
 
             // 设置根pane
             StackPane pane = new StackPane();
@@ -154,7 +162,7 @@ public class GigMouthMain extends Application {
                     if (e.getButton() == MouseButton.SECONDARY) {
                         clickMenu.show(pane, e.getScreenX(), e.getScreenY());
                     } else {
-                        if(2 == e.getClickCount()){
+                        if (2 == e.getClickCount()) {
                             System.out.println("double click");
                             imageView.setImage(new Image("file:C:\\Users\\86186\\Desktop\\牛栏山\\BigMouth\\jumpLine.gif"));
                         }
@@ -175,9 +183,11 @@ public class GigMouthMain extends Application {
             stage.setScene(scene);
             stage.show();
 
-        } catch (Exception e) {
+        } catch (
+                Exception e) {
             e.printStackTrace();
         }
+
     }
 
     public static void main(String[] args) {

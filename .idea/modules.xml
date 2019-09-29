@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/BigMouth.iml" filepath="$PROJECT_DIR$/BigMouth.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../mouth-server/mouth-server.iml" filepath="$PROJECT_DIR$/../mouth-server/mouth-server.iml" />
     </modules>
   </component>
 </project>
