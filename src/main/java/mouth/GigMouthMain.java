@@ -23,6 +23,8 @@ import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import mouth.widgets.MessageBox;
+import sample.AlertBox;
 import sample.ThreadMain;
 
 import java.io.File;
@@ -77,7 +79,8 @@ public class GigMouthMain extends Application {
                 public void handle(ActionEvent event) {
                     String menuText = ((MenuItem) event.getTarget()).getText();
                     if ("吐槽一下".equals(menuText)) {
-
+                        new MessageBox().display("吐槽一下");
+//                        new AlertBox().display("title", "message");
                     } else if ("叮咚".equals(menuText)) {
                         // 设置声音文件，用于播放提醒
                         String soundStr = classPath + "dingDong.mp3";
