@@ -28,7 +28,6 @@ import javax.imageio.ImageIO;
 /**
  * @author Maxim
  * 系统托盘示例代码
- * todo : 系统托盘图标
  */
 public class TrayMain extends Application {
 

@@ -50,6 +50,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+/**
+ * @author Maxim
+ * todo : 系统托盘图标
+ * todo : 跳转自动打开对应页面
+ */
 public class GigMouthMain extends Application {
 
     private static final int VIEW_HEIGHT = 100;

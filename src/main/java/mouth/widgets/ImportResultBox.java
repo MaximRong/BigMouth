@@ -3,33 +3,19 @@ package mouth.widgets;
 import cn.hutool.core.map.MapUtil;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
-import javafx.application.Platform;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Text;
 import javafx.scene.web.HTMLEditor;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import org.w3c.dom.Document;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-import org.w3c.dom.events.Event;
-import org.w3c.dom.events.EventListener;
-import org.w3c.dom.events.EventTarget;
-import org.w3c.dom.html.HTMLAnchorElement;
+import mouth.listener.HyperlinkRedirectListener;
 
-import java.awt.*;
-import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.Map;
 
 public class ImportResultBox {
@@ -82,49 +68,8 @@ public class ImportResultBox {
         WebEngine engine = webView.getEngine();
         engine.loadContent(out.toString());
 
-        engine.locationProperty().addListener(new ChangeListener<String>() {
-            @Override
-            public void changed(ObservableValue<? extends String> observable, final String oldValue, String newValue) {
-                Desktop d = Desktop.getDesktop();
-                try {
-                    System.out.println(oldValue);
-                    System.out.println(newValue);
-                    URI address = new URI(newValue);
-                    if ((address.getQuery() + "").contains("_openmodal=true")) {
-                        Platform.runLater(new Runnable() {
-                            @Override
-                            public void run() {
-                                engine.load(oldValue);
-                            }
-                        });
-                        d.browse(address);
-                    }
-                } catch (IOException | URISyntaxException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
+        engine.getLoadWorker().stateProperty().addListener(new HyperlinkRedirectListener(webView));
 
-        Document document = engine.getDocument();
-        NodeList nodeList = document.getElementsByTagName("a");
-        for (int i = 0; i < nodeList.getLength(); i++)
-        {
-            Node node= nodeList.item(i);
-            EventTarget eventTarget = (EventTarget) node;
-//            eventTarget.addEventListener("click", new EventListener()
-//            {
-//                @Override
-//                public void handleEvent(Event evt)
-//                {
-//                    EventTarget target = evt.getCurrentTarget();
-//                    HTMLAnchorElement anchorElement = (HTMLAnchorElement) target;
-//                    String href = anchorElement.getHref();
-//                    //handle opening URL outside JavaFX WebView
-//                    System.out.println(href);
-//                    evt.preventDefault();
-//                }
-//            }, false);
-        }
 
 //        Label label = new Label(message);
 
@@ -143,7 +88,7 @@ public class ImportResultBox {
 
         if (consumerResult) {
             if (!zeroMsg.equals(consumerInfo)) {
-                out.append(consumerInfo).append("<a href='http://www.baidu.com' target='_blank'>点击查看</a>").append("<br/>");
+                out.append(consumerInfo).append("<a href='http://localhost:9999/saas/erp/doc/consumer/list' target='_blank'>点击查看</a>").append("<br/>");
             }
             return;
         }
