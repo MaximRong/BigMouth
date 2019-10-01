@@ -1,5 +1,9 @@
 package mouth;
 
+import cn.hutool.core.map.MapUtil;
+import cn.hutool.json.JSON;
+import cn.hutool.json.JSONObject;
+import cn.hutool.json.JSONUtil;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
@@ -22,6 +26,7 @@ import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import mouth.widgets.ImportResultBox;
 import mouth.widgets.MessageBox;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -42,6 +47,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 public class GigMouthMain extends Application {
@@ -97,8 +103,7 @@ public class GigMouthMain extends Application {
                 public void handle(ActionEvent event) {
                     String menuText = ((MenuItem) event.getTarget()).getText();
                     if ("吐槽一下".equals(menuText)) {
-                        new MessageBox().display("吐槽一下");
-//                        new AlertBox().display("title", "message");
+                        new MessageBox().display();
                     } else if ("叮咚".equals(menuText)) {
                         // 设置声音文件，用于播放提醒
                         String soundStr = classPath + "dingDong.mp3";
@@ -175,7 +180,7 @@ public class GigMouthMain extends Application {
                         String result = EntityUtils.toString(response.getEntity(),"utf-8");
                         System.out.println(result);
                         imageView.setImage(new Image("file:C:\\Users\\86186\\Desktop\\牛栏山\\BigMouth\\hello.gif"));
-
+                        new ImportResultBox().display(result);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }

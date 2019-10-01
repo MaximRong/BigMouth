@@ -1,20 +1,22 @@
 package mouth.widgets;
 
+import cn.hutool.core.map.MapUtil;
+import cn.hutool.json.JSONObject;
+import cn.hutool.json.JSONUtil;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
-import java.util.Optional;
+import java.util.Map;
 
 public class MessageBox {
 
-    public void display(String message) {
+    public void display() {
         Stage window = new Stage();
         window.initStyle(StageStyle.UNDECORATED);
         //modality要使用Modality.APPLICATION_MODEL
