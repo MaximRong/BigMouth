@@ -14,7 +14,7 @@ import java.util.Optional;
 
 public class MessageBox {
 
-    public void display(String message){
+    public void display(String message) {
         Stage window = new Stage();
         window.initStyle(StageStyle.UNDECORATED);
         //modality要使用Modality.APPLICATION_MODEL
@@ -39,7 +39,7 @@ public class MessageBox {
 //        Label label = new Label(message);
 
         VBox layout = new VBox(10);
-        layout.getChildren().addAll(textArea , sendBtn, closeBtn);
+        layout.getChildren().addAll(textArea, sendBtn, closeBtn);
         layout.setAlignment(Pos.CENTER);
 
         Scene scene = new Scene(layout);
