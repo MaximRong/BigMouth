@@ -52,22 +52,24 @@ public class ImportResultBox {
         appendResult(supplierInfo, supplierResult, out, "供应商");
         appendResult(goodsPricePlanInfo, goodsPricePlanResult, out, "价格方案");
 
-        HTMLEditor htmlEditor = new HTMLEditor();
-        WebView webView = new WebView();
+      /*  HTMLEditor htmlEditor = new HTMLEditor();
+
 //        textArea.setWrappingWidth(200);
 //        textArea.setStyle("-fx-opacity: 1;");
         TextArea textArea = new TextArea();
         textArea.setText(out.toString());
         textArea.setWrapText(true);
         textArea.setEditable(false);
-        textArea.setStyle("-fx-opacity: 1;");
+        textArea.setStyle("-fx-opacity: 1;");*/
 
         Button closeBtn = new Button("关闭");
         closeBtn.setOnAction(e -> window.close());
 
+        WebView webView = new WebView();
         WebEngine engine = webView.getEngine();
         engine.loadContent(out.toString());
 
+        // 保证链接在新的浏览器打开
         engine.getLoadWorker().stateProperty().addListener(new HyperlinkRedirectListener(webView));
 
 
