@@ -11,6 +11,7 @@ import javafx.beans.value.ObservableValue;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Cursor;
 import javafx.scene.Scene;
 import javafx.scene.control.ContextMenu;
@@ -24,6 +25,7 @@ import javafx.scene.input.TransferMode;
 import javafx.scene.layout.StackPane;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import mouth.widgets.ImportResultBox;
@@ -60,7 +62,6 @@ public class GigMouthMain extends Application {
     private static final int VIEW_HEIGHT = 100;
     private static final int VIEW_WIDTH = 100;
     private TrayIcon trayIcon;
-    private static final String HTTP_URL = "http://localhost:9999/saas/erp/doc/goods/importExcelData4Mouth?doctype=consumer";
 
     private double xOffSet = 0;
     private double yOffSet = 0;
@@ -103,38 +104,35 @@ public class GigMouthMain extends Application {
                 }
             });
             // 处理左键点击主要事件
-            clickMenu.setOnAction(new EventHandler<ActionEvent>() {
-                @Override
-                public void handle(ActionEvent event) {
-                    String menuText = ((MenuItem) event.getTarget()).getText();
-                    if ("吐槽一下".equals(menuText)) {
-                        new MessageBox().display();
-                    } else if ("叮咚".equals(menuText)) {
-                        // 设置声音文件，用于播放提醒
-                        String soundStr = classPath + "dingDong.mp3";
-                        Media sound = new Media(new File(soundStr).toURI().toString());
-                        MediaPlayer mediaPlayer = new MediaPlayer(sound);
-                        mediaPlayer.play();
-                    } else {
-                        imageView.setImage(new Image("file:C:\\Users\\86186\\Desktop\\牛栏山\\BigMouth\\sleep.gif"));
+            clickMenu.setOnAction(event -> {
+                String menuText = ((MenuItem) event.getTarget()).getText();
+                if ("吐槽一下".equals(menuText)) {
+                    new MessageBox().display();
+                } else if ("叮咚".equals(menuText)) {
+                    // 设置声音文件，用于播放提醒
+                    String soundStr = classPath + "dingDong.mp3";
+                    Media sound = new Media(new File(soundStr).toURI().toString());
+                    MediaPlayer mediaPlayer = new MediaPlayer(sound);
+                    mediaPlayer.play();
+                } else {
+                    imageView.setImage(new Image("file:C:\\Users\\86186\\Desktop\\牛栏山\\BigMouth\\sleep.gif"));
 
-                        Task<Void> sleeper = new Task<Void>() {
-                            @Override
-                            protected Void call() {
-                                try {
-                                    Thread.sleep(1200);
-                                } catch (InterruptedException e) {
-                                    e.printStackTrace();
-                                }
-                                return null;
+                    Task<Void> sleeper = new Task<Void>() {
+                        @Override
+                        protected Void call() {
+                            try {
+                                Thread.sleep(1200);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
                             }
-                        };
-                        sleeper.setOnSucceeded(event1 ->  System.exit(0));
-                        new Thread(sleeper).start();
-                    }
-                    System.out.println("right gets consumed so this must be left on " +
-                            menuText);
+                            return null;
+                        }
+                    };
+                    sleeper.setOnSucceeded(event1 -> System.exit(0));
+                    new Thread(sleeper).start();
                 }
+                System.out.println("right gets consumed so this must be left on " +
+                        menuText);
             });
 
             MenuItem letterItem = new MenuItem("吐槽一下");
@@ -166,29 +164,8 @@ public class GigMouthMain extends Application {
                     // 处理的过场动画
                     imageView.setImage(new Image("file:C:\\Users\\86186\\Desktop\\牛栏山\\BigMouth\\move.gif"));
 
-                    CloseableHttpClient httpclient = HttpClients.createDefault();
+                    startFileUploadThread(imageView, stage, file);
 
-                    HttpPost post = new HttpPost(HTTP_URL);
-                    FileBody fileBody = new FileBody(file, ContentType.DEFAULT_BINARY);
-//                    StringBody stringBody1 = new StringBody("Message 1", ContentType.MULTIPART_FORM_DATA);
-//                    StringBody stringBody2 = new StringBody("Message 2", ContentType.MULTIPART_FORM_DATA);
-//
-                    MultipartEntityBuilder builder = MultipartEntityBuilder.create();
-                    builder.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
-                    builder.addPart("file", fileBody);
-//                    builder.addPart("text1", stringBody1);
-//                    builder.addPart("text2", stringBody2);
-                    HttpEntity entity = builder.build();
-                    post.setEntity(entity);
-                    try {
-                        HttpResponse response = httpclient.execute(post);
-                        String result = EntityUtils.toString(response.getEntity(),"utf-8");
-                        System.out.println(result);
-                        imageView.setImage(new Image("file:C:\\Users\\86186\\Desktop\\牛栏山\\BigMouth\\hello.gif"));
-                        new ImportResultBox().display(result);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
 
                     success = true;
                 }
@@ -208,19 +185,16 @@ public class GigMouthMain extends Application {
                 stage.setY(event.getScreenY() - yOffSet);
             });
 
-            pane.addEventFilter(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
-                @Override
-                public void handle(MouseEvent e) {
-                    // 右键点击事件
-                    if (e.getButton() == MouseButton.SECONDARY) {
-                        clickMenu.show(pane, e.getScreenX(), e.getScreenY());
-                    } else {
-                        if (2 == e.getClickCount()) {
-                            System.out.println("double click");
-                            imageView.setImage(new Image("file:C:\\Users\\86186\\Desktop\\牛栏山\\BigMouth\\jumpLine.gif"));
-                        }
-
+            pane.addEventFilter(MouseEvent.MOUSE_CLICKED, e -> {
+                // 右键点击事件
+                if (e.getButton() == MouseButton.SECONDARY) {
+                    clickMenu.show(pane, e.getScreenX(), e.getScreenY());
+                } else {
+                    if (2 == e.getClickCount()) {
+                        System.out.println("double click");
+                        imageView.setImage(new Image("file:C:\\Users\\86186\\Desktop\\牛栏山\\BigMouth\\jumpLine.gif"));
                     }
+
                 }
             });
 
@@ -229,10 +203,15 @@ public class GigMouthMain extends Application {
             // 设置组件大小
             Scene scene = new Scene(pane, VIEW_WIDTH, VIEW_HEIGHT);
             stage.setScene(scene);
+
+            // 初始化显示在屏幕的右下角
+            Rectangle2D primaryScreenBounds = Screen.getPrimary().getVisualBounds();
+            stage.setX(primaryScreenBounds.getMinX() + primaryScreenBounds.getWidth() - 300);
+            stage.setY(primaryScreenBounds.getMinY() + primaryScreenBounds.getHeight() - 300);
+
             stage.show();
 
-        } catch (
-                Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -250,6 +229,19 @@ public class GigMouthMain extends Application {
         });
 
         final Thread thread = new Thread(backStageThread, "backStageThread");
+        thread.setDaemon(true);
+        thread.start();
+    }
+
+    private void startFileUploadThread(ImageView imageView, Stage stage, File file) {
+        FileUploadThread fileUploadThread = new FileUploadThread(imageView, stage, file);
+        fileUploadThread.runningProperty().addListener((ov, wasRunning, isRunning) -> {
+//                if (!isRunning) {
+//
+//                }
+        });
+
+        final Thread thread = new Thread(fileUploadThread, "fileUploadThread");
         thread.setDaemon(true);
         thread.start();
     }
@@ -293,25 +285,28 @@ public class GigMouthMain extends Application {
         MouseListener mouseListener = new MouseListener() {
             public void mouseReleased(java.awt.event.MouseEvent e) {
             }
+
             public void mousePressed(java.awt.event.MouseEvent e) {
             }
+
             public void mouseExited(java.awt.event.MouseEvent e) {
             }
+
             public void mouseEntered(java.awt.event.MouseEvent e) {
             }
+
             public void mouseClicked(java.awt.event.MouseEvent e) {
                 //多次使用显示和隐藏设置false
                 Platform.setImplicitExit(false);
                 if (e.getClickCount() == 2) {
                     if (stage.isShowing()) {
                         Platform.runLater(stage::hide);
-                    }else{
+                    } else {
                         Platform.runLater(stage::show);
                     }
                 }
             }
         };
-
 
 
         openItem.addActionListener(actionListener);
@@ -330,7 +325,6 @@ public class GigMouthMain extends Application {
             trayIcon.setToolTip("自动备份工具");
             tray.add(trayIcon);
             trayIcon.addMouseListener(mouseListener);
-
 
 
         } catch (Exception e) {
