@@ -14,10 +14,45 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import mouth.listener.HyperlinkRedirectListener;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.Map;
 
 public class ImportResultBox {
+
+    private String html = "<!DOCTYPE html>\n" +
+            "<html lang=\"en\">\n" +
+            "<head>\n" +
+            "    <meta charset=\"UTF-8\">\n" +
+            "    <title>Title</title>\n" +
+            "    <script>\n" +
+            "        var delay = 0;\n" +
+            "        function appendHtml(id, s) {\n" +
+            "            id = id || \"text\";\n" +
+            "            var text = document.getElementById(id);\n" +
+            "            text.innerText = text.innerText + s;\n" +
+            "        }\n" +
+            "\n" +
+            "        function writeOneByOne(id, str) {\n" +
+            "            var id = id || \"text\";\n" +
+            "            for (var i = 0; i < str.length; i++) {\n" +
+            "                setTimeout(\"appendHtml('\" + id + \"', '\" + str.charAt(i) + \"')\", delay + 50 * i);\n" +
+            "            }\n" +
+            "            delay = delay + 50 * (str.length - 1);\n" +
+            "        }\n" +
+            "\n" +
+            "        document.addEventListener('DOMContentLoaded', function (event) {\n" +
+            "            var str = \"thisIsHtml\";\n" +
+            "            var body = document.getElementById(\"body\");\n" +
+            "            body.insertAdjacentHTML( 'beforeend', str );\n" +
+            "            thisIsWrite\n" +
+            "        })\n" +
+            "\n" +
+            "    </script>\n" +
+            "</head>\n" +
+            "<body id=\"body\">\n" +
+            "</body>\n" +
+            "</html>";
 
     public void display(Stage stage, String result) {
         Platform.runLater(() -> {
@@ -29,7 +64,7 @@ public class ImportResultBox {
             window.setWidth(300);
             window.setHeight(300);
 
-            window.setX(stage.getX() + stage.getWidth() / 2  - window.getWidth() / 2);
+            window.setX(stage.getX() + stage.getWidth() / 2 - window.getWidth() / 2);
             window.setY(stage.getY() - window.getHeight() - 20);
 
 
@@ -51,11 +86,16 @@ public class ImportResultBox {
             String goodsPricePlanInfo = MapUtil.getStr(goodsPricePlan, "info");
             Boolean goodsPricePlanResult = MapUtil.getBool(goodsPricePlan, "result");
 
-            StringBuilder out = new StringBuilder();
-            appendResult(consumerInfo, consumerResult, out, "客户");
-            appendResult(goodsInfo, goodsResult, out, "商品");
-            appendResult(supplierInfo, supplierResult, out, "供应商");
-            appendResult(goodsPricePlanInfo, goodsPricePlanResult, out, "价格方案");
+            StringBuilder htmlSb = new StringBuilder();
+            StringBuilder writeSb = new StringBuilder();
+            appendResult(consumerInfo, consumerResult, htmlSb, writeSb, "客户", "consumer");
+            appendResult(goodsInfo, goodsResult, htmlSb, writeSb, "商品", "goods");
+            appendResult(supplierInfo, supplierResult, htmlSb, writeSb, "供应商", "supplier");
+            appendResult(goodsPricePlanInfo, goodsPricePlanResult, htmlSb, writeSb, "价格方案", "goodsPricePlan");
+
+            html = StringUtils.replace(html, "thisIsHtml", htmlSb.toString());
+            html = StringUtils.replace(html, "thisIsWrite", writeSb.toString());
+            System.out.println(html);
 
       /*  HTMLEditor htmlEditor = new HTMLEditor();
 
@@ -72,7 +112,7 @@ public class ImportResultBox {
 
             WebView webView = new WebView();
             WebEngine engine = webView.getEngine();
-            engine.loadContent(out.toString());
+            engine.loadContent(html);
 
             // 保证链接在新的浏览器打开
             engine.getLoadWorker().stateProperty().addListener(new HyperlinkRedirectListener(webView));
@@ -93,17 +133,21 @@ public class ImportResultBox {
 
     }
 
-    private void appendResult(String consumerInfo, Boolean consumerResult, StringBuilder out, final String type) {
+    private void appendResult(String consumerInfo, Boolean consumerResult,
+                              StringBuilder html, StringBuilder out, final String type, String typeId) {
         String zeroMsg = "价格方案".equals(type) ? "更新0个商品明细" : "导入" + type + "档案0个";
 
         if (consumerResult) {
             if (!zeroMsg.equals(consumerInfo)) {
-                out.append(consumerInfo).append("<a href='http://localhost:9999/saas/erp/doc/consumer/list' target='_blank'>点击查看</a>").append("<br/>");
+                html.append("<div><span id='").append(typeId).append("'></span>").append("<a href='http://localhost:9999/saas/erp/doc/consumer/list' id='" + typeId + "_a' target='_blank'></a>").append("</div>");
+                out.append("writeOneByOne('").append(typeId).append("', '").append(consumerInfo).append("');\n");
+                out.append("writeOneByOne('").append(typeId).append("_a', '").append("点击查看").append(type).append("');\n");
             }
             return;
         }
 
-        out.append("导入").append(type).append("异常: ").append(consumerInfo).append("<br/>");
+        html.append("<div><span id='").append(typeId).append("'></span>").append("</div>");
+        out.append("writeOneByOne('").append(typeId).append("', '").append("导入").append(type).append("异常: ").append(consumerInfo).append("');\n");
     }
 
 }
