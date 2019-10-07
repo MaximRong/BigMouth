@@ -3,27 +3,19 @@ package sample;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
-import javafx.event.ActionEvent;
-import javafx.geometry.Rectangle2D;
 import javafx.scene.Cursor;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
-import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
-import javafx.scene.text.Text;
-import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import mouth.widgets.MessageBox;
+import mouth.widgets.SendTipBox;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -86,7 +78,7 @@ public class TransparentStage extends Application {
         clickMenu.setOnAction(event -> {
             String menuText = ((javafx.scene.control.MenuItem) event.getTarget()).getText();
             if ("吐槽一下".equals(menuText)) {
-                new MessageBox().display();
+                new SendTipBox().display();
             } else if ("叮咚".equals(menuText)) {
                 // 设置声音文件，用于播放提醒
                 String soundStr = classPath + "dingDong.mp3";

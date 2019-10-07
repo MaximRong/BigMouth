@@ -1,16 +1,10 @@
 package mouth;
 
-import cn.hutool.core.map.MapUtil;
-import cn.hutool.json.JSON;
-import cn.hutool.json.JSONObject;
-import cn.hutool.json.JSONUtil;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.concurrent.Task;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Cursor;
 import javafx.scene.Scene;
@@ -28,18 +22,7 @@ import javafx.scene.media.MediaPlayer;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import mouth.widgets.ImportResultBox;
-import mouth.widgets.MessageBox;
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.ContentType;
-import org.apache.http.entity.mime.HttpMultipartMode;
-import org.apache.http.entity.mime.MultipartEntityBuilder;
-import org.apache.http.entity.mime.content.FileBody;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
-import org.apache.http.util.EntityUtils;
+import mouth.widgets.SendTipBox;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -47,9 +30,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.IOException;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -78,6 +59,9 @@ public class GigMouthMain extends Application {
             stage.initStyle(StageStyle.TRANSPARENT);
             // 始终保持在前端/不会被最小化
             stage.setAlwaysOnTop(true);
+            stage.setTitle("大嘴怪兽");
+            String url = new File(classPath + "pokeBal.png").toURI().toString();
+            stage.getIcons().add(new Image(url));
 
             enableTray(stage);
 
@@ -93,13 +77,6 @@ public class GigMouthMain extends Application {
             // 将面板整个设置成手的形状
             imageView.addEventFilter(MouseEvent.MOUSE_ENTERED, e -> imageView.setCursor(Cursor.HAND));
 
-           /*
-            获取图片的长于宽，并且展示出来
-            double imageHeight = bigMouthImage.getHeight();
-            double imageWidth = bigMouthImage.getWidth();
-            System.out.println(imageWidth + " : " + imageHeight);
-            */
-
             // 设置菜单
             final ContextMenu clickMenu = new ContextMenu();
             clickMenu.addEventFilter(MouseEvent.MOUSE_RELEASED, event -> {
@@ -112,7 +89,7 @@ public class GigMouthMain extends Application {
             clickMenu.setOnAction(event -> {
                 String menuText = ((MenuItem) event.getTarget()).getText();
                 if ("吐槽一下".equals(menuText)) {
-                    new MessageBox().display();
+                    new SendTipBox().display();
                 } else if ("叮咚".equals(menuText)) {
                     // 设置声音文件，用于播放提醒
                     String soundStr = classPath + "dingDong.mp3";
@@ -204,7 +181,7 @@ public class GigMouthMain extends Application {
                 }
             });
 
-            startBackStageThread();
+            startBackStageThread(stage);
 
             // 设置组件大小
             Scene scene = new Scene(pane, VIEW_WIDTH, VIEW_HEIGHT);
@@ -286,15 +263,12 @@ public class GigMouthMain extends Application {
 
     }
 
-    private void startBackStageThread() {
-        BackStageThread backStageThread = new BackStageThread();
-        backStageThread.runningProperty().addListener(new ChangeListener<Boolean>() {
-            @Override
-            public void changed(ObservableValue<? extends Boolean> ov, Boolean wasRunning, Boolean isRunning) {
+    private void startBackStageThread(Stage stage) {
+        BackStageThread backStageThread = new BackStageThread(stage);
+        backStageThread.runningProperty().addListener((ov, wasRunning, isRunning) -> {
 //                if (!isRunning) {
 //
 //                }
-            }
         });
 
         final Thread thread = new Thread(backStageThread, "backStageThread");
