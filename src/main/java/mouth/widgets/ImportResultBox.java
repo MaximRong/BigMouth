@@ -61,6 +61,7 @@ public class ImportResultBox {
             window.initStyle(StageStyle.UNDECORATED);
             //modality要使用Modality.APPLICATION_MODEL
             window.initModality(Modality.APPLICATION_MODAL);
+            window.setAlwaysOnTop(true);
             window.setWidth(300);
             window.setHeight(300);
 
@@ -139,7 +140,9 @@ public class ImportResultBox {
 
         if (consumerResult) {
             if (!zeroMsg.equals(consumerInfo)) {
-                html.append("<div><span id='").append(typeId).append("'></span>").append("<a href='http://localhost:9999/saas/erp/doc/consumer/list' id='" + typeId + "_a' target='_blank'></a>").append("</div>");
+                html.append("<div><span id='").append(typeId).append("'></span>")
+                        .append("<a href='http://localhost:9999/saas/main?opentab=").append(typeId).append("' id='")
+                        .append(typeId).append("_a' target='_blank'></a>").append("</div>");
                 out.append("writeOneByOne('").append(typeId).append("', '").append(consumerInfo).append("');\n");
                 out.append("writeOneByOne('").append(typeId).append("_a', '").append("点击查看").append(type).append("');\n");
             }

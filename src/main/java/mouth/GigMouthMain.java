@@ -56,6 +56,8 @@ import java.util.Objects;
  * @author Maxim
  * todo : 系统托盘图标
  * todo : 跳转自动打开对应页面
+ * <p>
+ * // Bulbasaur
  */
 public class GigMouthMain extends Application {
 
@@ -72,19 +74,22 @@ public class GigMouthMain extends Application {
     public void start(Stage stage) {
         try {
             // 设计变成无边框的模式
-            stage.initStyle(StageStyle.UNDECORATED);
+//            stage.initStyle(StageStyle.UNDECORATED);
+            stage.initStyle(StageStyle.TRANSPARENT);
             // 始终保持在前端/不会被最小化
             stage.setAlwaysOnTop(true);
 
             enableTray(stage);
 
-
             // 启动初始图片
-            Image bigMouthImage = new Image("file:C:\\Users\\86186\\Desktop\\牛栏山\\BigMouth\\hello.gif");
+            Image bigMouthImage = new Image("file:C:\\Users\\86186\\Desktop\\牛栏山\\BigMouth\\pokeBall.gif");
             ImageView imageView = new ImageView();
+
+
             imageView.setImage(bigMouthImage);
             imageView.setFitWidth(VIEW_WIDTH);
             imageView.setFitHeight(VIEW_HEIGHT);
+            imageView.setStyle("-fx-background:transparent;");
             // 将面板整个设置成手的形状
             imageView.addEventFilter(MouseEvent.MOUSE_ENTERED, e -> imageView.setCursor(Cursor.HAND));
 
@@ -143,6 +148,8 @@ public class GigMouthMain extends Application {
 
             // 设置根pane
             StackPane pane = new StackPane();
+            // 设置的右键菜单后，一定要设置父面板背景透明，否则透明效果无效
+            pane.setStyle("-fx-background-color: transparent;");
             // 将其他组件加入
             pane.getChildren().addAll(imageView);
             pane.setOnDragOver(event -> {
@@ -191,7 +198,6 @@ public class GigMouthMain extends Application {
                     clickMenu.show(pane, e.getScreenX(), e.getScreenY());
                 } else {
                     if (2 == e.getClickCount()) {
-                        System.out.println("double click");
                         imageView.setImage(new Image("file:C:\\Users\\86186\\Desktop\\牛栏山\\BigMouth\\jumpLine.gif"));
                     }
 
@@ -202,6 +208,8 @@ public class GigMouthMain extends Application {
 
             // 设置组件大小
             Scene scene = new Scene(pane, VIEW_WIDTH, VIEW_HEIGHT);
+            // 透明
+            scene.setFill(null);
             stage.setScene(scene);
 
             // 初始化显示在屏幕的右下角
@@ -209,7 +217,68 @@ public class GigMouthMain extends Application {
             stage.setX(primaryScreenBounds.getMinX() + primaryScreenBounds.getWidth() - 300);
             stage.setY(primaryScreenBounds.getMinY() + primaryScreenBounds.getHeight() - 300);
 
+
+            stage.setOnShown(event -> {
+                Task<Void> sleeperBang = new Task<Void>() {
+                    @Override
+                    protected Void call() {
+                        try {
+                            Thread.sleep(1200);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        return null;
+                    }
+                };
+                sleeperBang.setOnSucceeded(event1 -> {
+//                    Image image = new Image("file:C:\\Users\\86186\\Desktop\\牛栏山\\BigMouth\\boom.gif");
+                    Image image = new Image("file:C:\\Users\\86186\\Desktop\\牛栏山\\BigMouth\\boom.gif", VIEW_WIDTH, VIEW_HEIGHT, false, false);
+                    imageView.setImage(image);
+                    imageView.setFitWidth(VIEW_WIDTH);
+                    imageView.setFitHeight(VIEW_HEIGHT);
+                });
+                new Thread(sleeperBang).start();
+
+                Task<Void> sleeper = new Task<Void>() {
+                    @Override
+                    protected Void call() {
+                        try {
+                            Thread.sleep(2400);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        return null;
+                    }
+                };
+//                sleeper.setOnSucceeded(event1 ->  imageView.setImage(new Image("file:C:\\Users\\86186\\Desktop\\牛栏山\\BigMouth\\hello.gif")));
+                sleeper.setOnSucceeded(event1 -> {
+                    Image image = new Image("file:C:\\Users\\86186\\Desktop\\牛栏山\\BigMouth\\omnom\\omnom.gif", VIEW_WIDTH, VIEW_HEIGHT, false, false);
+                    imageView.setImage(image);
+                    imageView.setFitWidth(VIEW_WIDTH);
+                    imageView.setFitHeight(VIEW_HEIGHT);
+                });
+                new Thread(sleeper).start();
+
+//                sleeper = new Task<Void>() {
+//                    @Override
+//                    protected Void call() {
+//                        try {
+//                            Thread.sleep(6000);
+//                        } catch (InterruptedException e) {
+//                            e.printStackTrace();
+//                        }
+//                        return null;
+//                    }
+//                };
+////                sleeper.setOnSucceeded(event1 ->  imageView.setImage(new Image("file:C:\\Users\\86186\\Desktop\\牛栏山\\BigMouth\\hello.gif")));
+//                sleeper.setOnSucceeded(event1 ->  imageView.setImage(new Image("file:C:\\Users\\86186\\Desktop\\牛栏山\\BigMouth\\omnom\\omnom_dengdai.png")));
+//                new Thread(sleeper).start();
+
+
+            });
+
             stage.show();
+
 
         } catch (Exception e) {
             e.printStackTrace();
