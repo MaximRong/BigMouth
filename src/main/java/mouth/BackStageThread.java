@@ -45,6 +45,8 @@ public class BackStageThread extends Task<List<String>> {
             String result = messageSplit[2];
             if("openBill".equals(type)) {
                 new MessageBox().display(stage, bisType, result);
+            } else if("error".equals(type)) {
+                new MessageBox().display(stage, bisType, "老大，您的问题已经收到，会尽快安排！放心！");
             }
         }
 
