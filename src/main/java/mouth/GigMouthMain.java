@@ -2,8 +2,6 @@ package mouth;
 
 import javafx.application.Application;
 import javafx.application.Platform;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.concurrent.Task;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Cursor;
@@ -22,6 +20,7 @@ import javafx.scene.media.MediaPlayer;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import mouth.widgets.MessageBox;
 import mouth.widgets.SendTipBox;
 
 import javax.imageio.ImageIO;
@@ -32,6 +31,9 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * @author Maxim
@@ -139,17 +141,13 @@ public class GigMouthMain extends Application {
             });
 
 
-
-
             pane.setOnDragEntered(event -> {
                 Dragboard db = event.getDragboard();
-                boolean success = false;
                 if (db.hasFiles()) {
                     List<File> files = db.getFiles();
                     File file = files.get(0);
                     // 处理的过场动画
                     imageView.setImage(new Image("file:C:\\Users\\86186\\Desktop\\牛栏山\\BigMouth\\omnom\\omnom_weiwo.gif"));
-                    success = true;
                 }
                 /* let the source know whether the string was successfully
                  * transferred and used */
@@ -176,14 +174,63 @@ public class GigMouthMain extends Application {
                 event.consume();
             });
 
+            // 重复次数
+            AtomicInteger duplication = new AtomicInteger();
+            AtomicBoolean bigger = new AtomicBoolean(false);
+            AtomicBoolean smaller = new AtomicBoolean(false);
+
             pane.setOnMousePressed(event -> {
+                System.out.println("1摇晃的次数是: " + duplication.get());
                 xOffSet = event.getSceneX();
                 yOffSet = event.getSceneY();
             });
 
+            pane.setOnMouseReleased(event -> {
+                duplication.set(0);
+            });
+
+            AtomicReference<Double> lastScreenX = new AtomicReference<>((double) 0);
             pane.setOnMouseDragged(event -> {
-                stage.setX(event.getScreenX() - xOffSet);
-                stage.setY(event.getScreenY() - yOffSet);
+                double screenX = event.getScreenX();
+                boolean lastBigger = bigger.get();
+                System.out.println("当前的点是 " + screenX + ", 之前的点是 " + lastScreenX);
+                if(screenX != lastScreenX.get()) {
+                    bigger.set(screenX > lastScreenX.get());
+                    if(lastBigger != bigger.get()) {
+                        duplication.incrementAndGet();
+                    }
+
+
+                }
+                lastScreenX.set(screenX);
+
+                if(duplication.get() <= 20) {
+                    stage.setX(screenX - xOffSet);
+                    stage.setY(event.getScreenY() - yOffSet);
+                } else {
+                    duplication.set(0);
+                    // omnom_shengqi.gif
+                    imageView.setImage(new Image("file:C:\\Users\\86186\\Desktop\\牛栏山\\BigMouth\\omnom\\omnom_shengqi.gif"));
+                    new MessageBox().display(stage, "TEXT", "老大，求您不要再晃我了，我说还不行嘛...云管家仅新版本已经配置了在线支付功能了哦~");
+
+                    Task<Void> sleeper = new Task<Void>() {
+                        @Override
+                        protected Void call() {
+                            try {
+                                Thread.sleep(4200);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                            return null;
+                        }
+                    };
+                    sleeper.setOnSucceeded(event1 -> {
+                        Image image = new Image("file:C:\\Users\\86186\\Desktop\\牛栏山\\BigMouth\\omnom\\omnom.gif");
+                        imageView.setImage(image);
+                    });
+                    new Thread(sleeper).start();
+                }
+
             });
 
             pane.addEventFilter(MouseEvent.MOUSE_CLICKED, e -> {
