@@ -59,7 +59,7 @@ public class GigMouthMain extends Application {
             stage.initStyle(StageStyle.TRANSPARENT);
             // 始终保持在前端/不会被最小化
             stage.setAlwaysOnTop(true);
-            stage.setTitle("大嘴怪兽");
+            stage.setTitle("大口怪兽");
             String url = new File(classPath + "pokeBal.png").toURI().toString();
             stage.getIcons().add(new Image(url));
 
@@ -89,7 +89,7 @@ public class GigMouthMain extends Application {
             clickMenu.setOnAction(event -> {
                 String menuText = ((MenuItem) event.getTarget()).getText();
                 if ("吐槽一下".equals(menuText)) {
-                    new SendTipBox().display();
+                    new SendTipBox().display(stage);
                 } else if ("叮咚".equals(menuText)) {
                     // 设置声音文件，用于播放提醒
                     String soundStr = classPath + "dingDong.mp3";
@@ -97,7 +97,7 @@ public class GigMouthMain extends Application {
                     MediaPlayer mediaPlayer = new MediaPlayer(sound);
                     mediaPlayer.play();
                 } else {
-                    imageView.setImage(new Image("file:C:\\Users\\86186\\Desktop\\牛栏山\\BigMouth\\sleep.gif"));
+                    imageView.setImage(new Image("file:C:\\Users\\86186\\Desktop\\牛栏山\\BigMouth\\omnom\\omnom_shuijiao.gif"));
 
                     Task<Void> sleeper = new Task<Void>() {
                         @Override
@@ -139,6 +139,23 @@ public class GigMouthMain extends Application {
             });
 
 
+
+
+            pane.setOnDragEntered(event -> {
+                Dragboard db = event.getDragboard();
+                boolean success = false;
+                if (db.hasFiles()) {
+                    List<File> files = db.getFiles();
+                    File file = files.get(0);
+                    // 处理的过场动画
+                    imageView.setImage(new Image("file:C:\\Users\\86186\\Desktop\\牛栏山\\BigMouth\\omnom\\omnom_weiwo.gif"));
+                    success = true;
+                }
+                /* let the source know whether the string was successfully
+                 * transferred and used */
+                event.consume();
+            });
+
             pane.setOnDragDropped(event -> {
                 Dragboard db = event.getDragboard();
                 boolean success = false;
@@ -146,7 +163,7 @@ public class GigMouthMain extends Application {
                     List<File> files = db.getFiles();
                     File file = files.get(0);
                     // 处理的过场动画
-                    imageView.setImage(new Image("file:C:\\Users\\86186\\Desktop\\牛栏山\\BigMouth\\move.gif"));
+                    imageView.setImage(new Image("file:C:\\Users\\86186\\Desktop\\牛栏山\\BigMouth\\omnom\\omnom_weiwo.gif"));
 
                     startFileUploadThread(imageView, stage, file);
 

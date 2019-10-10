@@ -19,6 +19,11 @@ public class MessageBox {
             message = MessageUtil.appendMessage("page", "【点击查看】");
             length += message.origLength();
             content += message.getContent();
+        } else if("TEXT".equals(bisType)) {
+            html = "<span id='content'></span>";
+            Message message = MessageUtil.appendMessage("content", result);
+            length += message.origLength();
+            content += message.getContent();
         }
 
         WebViewUtil.show(stage, html, content, length);
