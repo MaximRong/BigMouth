@@ -193,7 +193,7 @@ public class GigMouthMain extends Application {
             pane.setOnMouseDragged(event -> {
                 double screenX = event.getScreenX();
                 boolean lastBigger = bigger.get();
-                System.out.println("当前的点是 " + screenX + ", 之前的点是 " + lastScreenX);
+//                System.out.println("当前的点是 " + screenX + ", 之前的点是 " + lastScreenX);
                 if(screenX != lastScreenX.get()) {
                     bigger.set(screenX > lastScreenX.get());
                     if(lastBigger != bigger.get()) {
