@@ -11,7 +11,7 @@ public class SoundUtil {
     private static String classPath = Objects.requireNonNull(SoundUtil.class.getClassLoader().getResource("")).getPath();
 
     public static void dingDong() {
-        String soundStr = classPath + "dingDong.mp3";
+        String soundStr = classPath + "wawa.m4r";
         Media sound = new Media(new File(soundStr).toURI().toString());
         MediaPlayer mediaPlayer = new MediaPlayer(sound);
         mediaPlayer.play();

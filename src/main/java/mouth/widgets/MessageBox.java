@@ -1,5 +1,6 @@
 package mouth.widgets;
 
+import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import mouth.bean.Message;
 import mouth.util.MessageUtil;
@@ -19,7 +20,7 @@ public class MessageBox {
             "</body>\n" +
             "</html>";
 
-    public void display(Stage stage, String bisType, String result) {
+    public void display(Stage stage, ImageView imageView, String bisType, String result) {
         String html = "", content = "";
         int length = 0;
         if ("XD".equals(bisType) || "XS".equals(bisType)) {
@@ -31,19 +32,28 @@ public class MessageBox {
             message = MessageUtil.appendMessage("page", "【点击查看】");
             length += message.origLength();
             content += message.getContent();
+            WebViewUtil.show(stage, imageView, html, content, length);
         } else if ("TEXT".equals(bisType)) {
             html = "<span id='content' style='font-size: 20px;'></span>";
             Message message = MessageUtil.appendMessage("content", result);
             length += message.origLength();
             content += message.getContent();
+            WebViewUtil.show(stage, imageView, html, content, length);
+        } else if ("YUN".equals(bisType)) {
+            html = "<span id='content' style='font-size: 20px;'></span>";
+            Message message = MessageUtil.appendMessage("content", result);
+            length += message.origLength();
+            content += message.getContent();
+            WebViewUtil.showNo(stage, imageView, html, content, length);
         } else if ("error".equals(bisType)) {
             html = "<span id='content' style='font-size: 20px;'></span>";
             Message message = MessageUtil.appendMessage("content", result);
             length += message.origLength();
             content += message.getContent();
+            WebViewUtil.show(stage, imageView, html, content, length);
         }
 
-        WebViewUtil.show(stage, html, content, length);
+
 
     }
 

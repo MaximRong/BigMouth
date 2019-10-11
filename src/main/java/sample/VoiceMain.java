@@ -27,7 +27,7 @@ public class VoiceMain extends Application {
 
         // 这个是获取此文件编译后的路径地址
 
-        String soundStr = path + "dingDong.mp3";
+        String soundStr = path + "wawa.m4r";
         Media sound = new Media(new File(soundStr).toURI().toString());
         MediaPlayer mediaPlayer = new MediaPlayer(sound);
         mediaPlayer.play();

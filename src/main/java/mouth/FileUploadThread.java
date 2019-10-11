@@ -55,8 +55,10 @@ public class FileUploadThread extends Task<List<String>> {
             HttpResponse response = httpclient.execute(post);
             String result = EntityUtils.toString(response.getEntity(),"utf-8");
             System.out.println(result);
-            imageView.setImage(new Image("file:C:\\Users\\86186\\Desktop\\牛栏山\\BigMouth\\omnom\\omnom.gif"));
-            new ImportResultBox().display(stage, result);
+//            imageView.setImage(new Image("file:C:\\Users\\86186\\Desktop\\牛栏山\\BigMouth\\omnom\\omnom.gif"));
+//            Image image = new Image("file:C:\\Users\\86186\\Desktop\\牛栏山\\BigMouth\\nimo\\nimo_kaishi.gif");
+//            imageView.setImage(image);
+            new ImportResultBox().display(stage, imageView, result);
         } catch (IOException e) {
             e.printStackTrace();
         }

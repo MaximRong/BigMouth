@@ -91,15 +91,15 @@ public class GigMouthMain extends Application {
             clickMenu.setOnAction(event -> {
                 String menuText = ((MenuItem) event.getTarget()).getText();
                 if ("吐槽一下".equals(menuText)) {
-                    new SendTipBox().display(stage);
+                    new SendTipBox().display(stage, imageView);
                 } else if ("叮咚".equals(menuText)) {
                     // 设置声音文件，用于播放提醒
-                    String soundStr = classPath + "dingDong.mp3";
+                    String soundStr = classPath + "wawa.m4r";
                     Media sound = new Media(new File(soundStr).toURI().toString());
                     MediaPlayer mediaPlayer = new MediaPlayer(sound);
                     mediaPlayer.play();
                 } else {
-                    imageView.setImage(new Image("file:C:\\Users\\86186\\Desktop\\牛栏山\\BigMouth\\omnom\\omnom_shuijiao.gif"));
+                    imageView.setImage(new Image("file:C:\\Users\\86186\\Desktop\\牛栏山\\BigMouth\\nimo\\nimo_bye.gif"));
 
                     Task<Void> sleeper = new Task<Void>() {
                         @Override
@@ -120,9 +120,9 @@ public class GigMouthMain extends Application {
             });
 
             MenuItem letterItem = new MenuItem("吐槽一下");
-            MenuItem voiceItem = new MenuItem("叮咚");
+//            MenuItem voiceItem = new MenuItem("叮咚");
             MenuItem quitItem = new MenuItem("退出");
-            clickMenu.getItems().addAll(letterItem, voiceItem, quitItem);
+            clickMenu.getItems().addAll(letterItem, quitItem);
 
 
             // 设置根pane
@@ -147,7 +147,7 @@ public class GigMouthMain extends Application {
                     List<File> files = db.getFiles();
                     File file = files.get(0);
                     // 处理的过场动画
-                    imageView.setImage(new Image("file:C:\\Users\\86186\\Desktop\\牛栏山\\BigMouth\\omnom\\omnom_weiwo.gif"));
+                    imageView.setImage(new Image("file:C:\\Users\\86186\\Desktop\\牛栏山\\BigMouth\\nimo\\nimo_zhangzui.png"));
                 }
                 /* let the source know whether the string was successfully
                  * transferred and used */
@@ -163,8 +163,8 @@ public class GigMouthMain extends Application {
                     String name = file.getName();
                     if (!"xls".equals(name.split("\\.")[1])) {
                         file.delete();
-                        imageView.setImage(new Image("file:C:\\Users\\86186\\Desktop\\牛栏山\\BigMouth\\omnom\\omnom_ganga.gif"));
-                        new MessageBox().display(stage, "TEXT", "嗝~");
+                        imageView.setImage(new Image("file:C:\\Users\\86186\\Desktop\\牛栏山\\BigMouth\\nimo\\nimo_jujue.gif"));
+                        new MessageBox().display(stage, imageView, "TEXT", "嗝~");
                         Task<Void> sleeper = new Task<Void>() {
                             @Override
                             protected Void call() {
@@ -177,14 +177,15 @@ public class GigMouthMain extends Application {
                             }
                         };
                         sleeper.setOnSucceeded(event1 -> {
-                            imageView.setImage(new Image("file:C:\\Users\\86186\\Desktop\\牛栏山\\BigMouth\\omnom\\omnom.gif"));
+//                            imageView.setImage(new Image("file:C:\\Users\\86186\\Desktop\\牛栏山\\BigMouth\\omnom\\omnom.gif"));
+                            Image image = new Image("file:C:\\Users\\86186\\Desktop\\牛栏山\\BigMouth\\nimo\\nimo_kaishi.gif");
                         });
                         new Thread(sleeper).start();
 
 
                     } else {
                         // 处理的过场动画
-                        imageView.setImage(new Image("file:C:\\Users\\86186\\Desktop\\牛栏山\\BigMouth\\omnom\\omnom_weiwo.gif"));
+                        imageView.setImage(new Image("file:C:\\Users\\86186\\Desktop\\牛栏山\\BigMouth\\nimo\\nimo_jujue.gif"));
                         startFileUploadThread(imageView, stage, file);
                     }
 
@@ -232,7 +233,7 @@ public class GigMouthMain extends Application {
                     duplication.set(0);
                     // omnom_shengqi.gif
                     imageView.setImage(new Image("file:C:\\Users\\86186\\Desktop\\牛栏山\\BigMouth\\nimo\\nimo_yun.gif"));
-                    new MessageBox().display(stage, "TEXT", "老大，求您不要再晃我了，我说还不行嘛...云管家仅新版本已经配置了在线支付功能了哦~");
+                    new MessageBox().display(stage, imageView, "YUN", "老大，求您不要再晃我了，我说还不行嘛...云管家仅新版本已经配置了在线支付功能了哦~");
 
                     Task<Void> sleeper = new Task<Void>() {
                         @Override
@@ -246,7 +247,8 @@ public class GigMouthMain extends Application {
                         }
                     };
                     sleeper.setOnSucceeded(event1 -> {
-                        Image image = new Image("file:C:\\Users\\86186\\Desktop\\牛栏山\\BigMouth\\omnom\\omnom.gif");
+//                        Image image = new Image("file:C:\\Users\\86186\\Desktop\\牛栏山\\BigMouth\\omnom\\omnom.gif");
+                        Image image = new Image("file:C:\\Users\\86186\\Desktop\\牛栏山\\BigMouth\\nimo\\nimo_kaishi.gif");
                         imageView.setImage(image);
                     });
                     new Thread(sleeper).start();
@@ -260,13 +262,32 @@ public class GigMouthMain extends Application {
                     clickMenu.show(pane, e.getScreenX(), e.getScreenY());
                 } else {
                     if (2 == e.getClickCount()) {
-                        imageView.setImage(new Image("file:C:\\Users\\86186\\Desktop\\牛栏山\\BigMouth\\jumpLine.gif"));
+                        imageView.setImage(new Image("file:C:\\Users\\86186\\Desktop\\牛栏山\\BigMouth\\nimo\\nimo_yun.gif"));
+
+                        Task<Void> sleeper = new Task<Void>() {
+                            @Override
+                            protected Void call() {
+                                try {
+                                    Thread.sleep(3000);
+                                } catch (InterruptedException e) {
+                                    e.printStackTrace();
+                                }
+                                return null;
+                            }
+                        };
+                        sleeper.setOnSucceeded(event1 -> {
+//                            Image image = new Image("file:C:\\Users\\86186\\Desktop\\牛栏山\\BigMouth\\omnom\\omnom.gif");
+                            Image image = new Image("file:C:\\Users\\86186\\Desktop\\牛栏山\\BigMouth\\nimo\\nimo_kaishi.gif");
+                            imageView.setImage(image);
+                        });
+                        new Thread(sleeper).start();
+
                     }
 
                 }
             });
 
-            startBackStageThread(stage);
+            startBackStageThread(stage, imageView);
 
             // 设置组件大小
             Scene scene = new Scene(pane, VIEW_WIDTH, VIEW_HEIGHT);
@@ -280,7 +301,7 @@ public class GigMouthMain extends Application {
             stage.setY(primaryScreenBounds.getMinY() + primaryScreenBounds.getHeight() - 300);
 
 
-            stage.setOnShown(event -> {
+           stage.setOnShown(event -> {
                 Task<Void> sleeperBang = new Task<Void>() {
                     @Override
                     protected Void call() {
@@ -314,27 +335,14 @@ public class GigMouthMain extends Application {
                 };
 //                sleeper.setOnSucceeded(event1 ->  imageView.setImage(new Image("file:C:\\Users\\86186\\Desktop\\牛栏山\\BigMouth\\hello.gif")));
                 sleeper.setOnSucceeded(event1 -> {
-                    Image image = new Image("file:C:\\Users\\86186\\Desktop\\牛栏山\\BigMouth\\omnom\\omnom.gif", VIEW_WIDTH, VIEW_HEIGHT, false, false);
+//                    Image image = new Image("file:C:\\Users\\86186\\Desktop\\牛栏山\\BigMouth\\omnom\\omnom.gif", VIEW_WIDTH, VIEW_HEIGHT, false, false);
+                    Image image = new Image("file:C:\\Users\\86186\\Desktop\\牛栏山\\BigMouth\\nimo\\nimo_kaishi.gif");
                     imageView.setImage(image);
                     imageView.setFitWidth(VIEW_WIDTH);
                     imageView.setFitHeight(VIEW_HEIGHT);
                 });
                 new Thread(sleeper).start();
 
-//                sleeper = new Task<Void>() {
-//                    @Override
-//                    protected Void call() {
-//                        try {
-//                            Thread.sleep(6000);
-//                        } catch (InterruptedException e) {
-//                            e.printStackTrace();
-//                        }
-//                        return null;
-//                    }
-//                };
-////                sleeper.setOnSucceeded(event1 ->  imageView.setImage(new Image("file:C:\\Users\\86186\\Desktop\\牛栏山\\BigMouth\\hello.gif")));
-//                sleeper.setOnSucceeded(event1 ->  imageView.setImage(new Image("file:C:\\Users\\86186\\Desktop\\牛栏山\\BigMouth\\omnom\\omnom_dengdai.png")));
-//                new Thread(sleeper).start();
 
 
             });
@@ -348,8 +356,8 @@ public class GigMouthMain extends Application {
 
     }
 
-    private void startBackStageThread(Stage stage) {
-        BackStageThread backStageThread = new BackStageThread(stage);
+    private void startBackStageThread(Stage stage, ImageView imageView) {
+        BackStageThread backStageThread = new BackStageThread(stage, imageView);
         backStageThread.runningProperty().addListener((ov, wasRunning, isRunning) -> {
 //                if (!isRunning) {
 //

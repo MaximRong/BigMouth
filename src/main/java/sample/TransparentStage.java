@@ -78,10 +78,10 @@ public class TransparentStage extends Application {
         clickMenu.setOnAction(event -> {
             String menuText = ((javafx.scene.control.MenuItem) event.getTarget()).getText();
             if ("吐槽一下".equals(menuText)) {
-                new SendTipBox().display(stage);
+                new SendTipBox().display(stage, imageView);
             } else if ("叮咚".equals(menuText)) {
                 // 设置声音文件，用于播放提醒
-                String soundStr = classPath + "dingDong.mp3";
+                String soundStr = classPath + "wawa.m4r";
                 Media sound = new Media(new File(soundStr).toURI().toString());
                 MediaPlayer mediaPlayer = new MediaPlayer(sound);
                 mediaPlayer.play();

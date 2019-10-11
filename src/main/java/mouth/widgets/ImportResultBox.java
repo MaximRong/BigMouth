@@ -3,6 +3,7 @@ package mouth.widgets;
 import cn.hutool.core.map.MapUtil;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
+import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import mouth.bean.Message;
 import mouth.util.MessageUtil;
@@ -13,7 +14,7 @@ import java.util.Map;
 public class ImportResultBox {
 
 
-    public void display(Stage stage, String result) {
+    public void display(Stage stage, ImageView imageView, String result) {
         JSONObject resultJson = JSONUtil.parseObj(result);
         Map map = (Map) resultJson.get("map");
         Map supplier = (Map) map.get("supplier");
@@ -40,7 +41,7 @@ public class ImportResultBox {
         messageLength += appendResult(supplierInfo, supplierResult, htmlSb, writeSb, "供应商", "supplier");
         messageLength += appendResult(goodsPricePlanInfo, goodsPricePlanResult, htmlSb, writeSb, "价格方案", "goodsPricePlan");
 
-        WebViewUtil.show(stage, htmlSb.toString(), writeSb.toString(), messageLength);
+        WebViewUtil.show(stage, imageView, htmlSb.toString(), writeSb.toString(), messageLength);
     }
 
     private int appendResult(String consumerInfo, Boolean consumerResult,
@@ -50,9 +51,9 @@ public class ImportResultBox {
 
         if (consumerResult) {
             if (!zeroMsg.equals(consumerInfo)) {
-                html.append("<div><span id='").append(typeId).append("'></span>")
+                html.append("<div><span id='").append(typeId).append("'  style='font-size: 20px;'></span>")
                         .append("<a").append(MessageUtil.getPageUrl(typeId)).append(" id='")
-                        .append(typeId).append("_a' target='_blank'></a>").append("</div>");
+                        .append(typeId).append("_a' target='_blank'  style='font-size: 20px;'></a>").append("</div>");
                 Message message = MessageUtil.appendMessage(typeId, consumerInfo);
                 length += message.getOrig().length();
                 out.append(message.getContent());
@@ -63,7 +64,7 @@ public class ImportResultBox {
             return length;
         }
 
-        html.append("<div><span id='").append(typeId).append("'></span>").append("</div>");
+        html.append("<div><span id='").append(typeId).append("'  style='font-size: 20px;'></span>").append("</div>");
         Message message = MessageUtil.appendMessage(typeId, "导入" + type + "异常: " + consumerInfo);
         length += message.getOrig().length();
         out.append(message.getContent());

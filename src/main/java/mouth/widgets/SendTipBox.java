@@ -7,6 +7,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
@@ -29,11 +30,9 @@ public class SendTipBox {
     private static final String QUESTION_URL = "http://localhost:9999/saas/erp/other/consumerFeedback/question?index=";
 
     private static final String[] QUESTIONS = {"销售订单和销售单有什么区别？",
-            "我单子一张一张打印太麻烦，能不能一起全部打印？",
-            "红冲的订单能不能再恢复？",
-            "开销售单、退货单、调拨单等单据时，关联仓库正在盘点中，无法提交单据。如何解决？"};
+            "我单子一张一张打印太麻烦，能不能一起全部打印？"};
 
-    public void display(Stage stage) {
+    public void display(Stage stage, ImageView imageView) {
         try {
             Stage window = new Stage();
             window.initStyle(StageStyle.UNDECORATED);
@@ -72,7 +71,7 @@ public class SendTipBox {
                 if (found) {
                     sendQuestion2Saas(stage, index);
                 } else {
-                    sendMessage2Saas(stage, content);
+                    sendMessage2Saas(stage, imageView, content);
                 }
 
                 // 吐槽完了之后完毕对话框
@@ -100,14 +99,14 @@ public class SendTipBox {
         }
     }
 
-    private void sendMessage2Saas(Stage stage, String content) {
+    private void sendMessage2Saas(Stage stage, ImageView imageView, String content) {
         HttpGet httpGet = new HttpGet(MESSAGE_URL + content);
         try {
             CloseableHttpClient httpclient = HttpClients.createDefault();
             HttpResponse response = httpclient.execute(httpGet);
             String result = EntityUtils.toString(response.getEntity(), "utf-8");
             System.out.println(result);
-            new MessageBox().display(stage, "TEXT", "老大，您的问题我已经反馈成功了，会尽快安排！放心！");
+            new MessageBox().display(stage, imageView, "TEXT", "老大，您的问题我已经反馈成功了，会尽快安排！放心！");
         } catch (IOException ex) {
             ex.printStackTrace();
         }
