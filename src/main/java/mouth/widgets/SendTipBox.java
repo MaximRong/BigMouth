@@ -1,9 +1,13 @@
 package mouth.widgets;
 
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
+import javafx.scene.image.Image;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -15,7 +19,9 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 
+import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 
 public class SendTipBox {
 
@@ -28,50 +34,58 @@ public class SendTipBox {
             "开销售单、退货单、调拨单等单据时，关联仓库正在盘点中，无法提交单据。如何解决？"};
 
     public void display(Stage stage) {
+        try {
+            Stage window = new Stage();
+            window.initStyle(StageStyle.UNDECORATED);
+            //modality要使用Modality.APPLICATION_MODEL
+            window.initModality(Modality.APPLICATION_MODAL);
+            window.setWidth(600);
+            window.setHeight(400);
 
-        Stage window = new Stage();
-        window.initStyle(StageStyle.UNDECORATED);
-        //modality要使用Modality.APPLICATION_MODEL
-        window.initModality(Modality.APPLICATION_MODAL);
-        window.setWidth(300);
-        window.setHeight(150);
+            window.setX(stage.getX() + stage.getWidth() / 2 - window.getWidth() / 2 - 100);
+            window.setY(stage.getY() - window.getHeight() - 20);
 
-        TextArea textArea = new TextArea();
+            window.setTitle("怪兽消息");
+            URL resource = getClass().getResource("/pokeBal.png");
+            window.getIcons().add(new Image(resource.toString()));
 
-        Button sendBtn = new Button("发送吐槽");
-        Button closeBtn = new Button("不想吐了");
-        sendBtn.setOnAction(e -> {
-            // 发送到saas服务器
-            String content = textArea.getText();
-            int index = 0; boolean found = false;
-            for(; index < QUESTIONS.length; index++) {
-                String question = QUESTIONS[index];
-                if(question.contains(content)) {
-                    found = true;
-                    break;
+            Pane pane = FXMLLoader.load(getClass().getResource("/sendBox.fxml"));
+
+            TextArea textArea = (TextArea) pane.getChildren().get(0);
+            Button sendBtn = (Button) pane.getChildren().get(1);
+            Button closeBtn = (Button) pane.getChildren().get(2);
+
+            sendBtn.setOnAction(e -> {
+                // 发送到saas服务器
+                String content = textArea.getText();
+                int index = 0;
+                boolean found = false;
+                for (; index < QUESTIONS.length; index++) {
+                    String question = QUESTIONS[index];
+                    if (question.contains(content)) {
+                        found = true;
+                        break;
+                    }
                 }
-            }
 
-            // 如果找到了对应问题，发送到云管家获取html
-            if(found) {
-                sendQuestion2Saas(stage, index);
-            } else {
-                sendMessage2Saas(stage, content);
-            }
+                // 如果找到了对应问题，发送到云管家获取html
+                if (found) {
+                    sendQuestion2Saas(stage, index);
+                } else {
+                    sendMessage2Saas(stage, content);
+                }
 
-            // 吐槽完了之后完毕对话框
-            window.close();
-        });
-        closeBtn.setOnAction(e -> window.close());
-
-        VBox layout = new VBox(10);
-        layout.getChildren().addAll(textArea, sendBtn, closeBtn);
-        layout.setAlignment(Pos.CENTER);
-
-        Scene scene = new Scene(layout);
-        window.setScene(scene);
-        //使用showAndWait()先处理这个窗口，而如果不处理，main中的那个窗口不能响应
-        window.showAndWait();
+                // 吐槽完了之后完毕对话框
+                window.close();
+            });
+            closeBtn.setOnAction(e -> window.close());
+            Scene scene = new Scene(pane);
+            window.setScene(scene);
+            //使用showAndWait()先处理这个窗口，而如果不处理，main中的那个窗口不能响应
+            window.showAndWait();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private void sendQuestion2Saas(Stage stage, int index) {

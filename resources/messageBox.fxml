@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.web.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="349.0" prefWidth="390.0" style="-fx-background-color: rgba(0, 100, 100, 0);;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <Pane prefHeight="260.0" prefWidth="389.0" style="-fx-border-color: #000000;">
+         <children>
+            <WebView id="webView" layoutX="1.0" layoutY="1.0" prefHeight="258.0" prefWidth="387.0" />
+         </children>
+      </Pane>
+      <Ellipse fill="WHITE" layoutX="41.0" layoutY="284.0" radiusX="22.0" radiusY="14.0" stroke="BLACK" strokeType="INSIDE" />
+      <Ellipse fill="WHITE" layoutX="69.0" layoutY="314.0" radiusX="18.0" radiusY="11.0" stroke="BLACK" strokeType="INSIDE" />
+      <Button layoutX="262.0" layoutY="270.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="107.0" style="-fx-background-color: #ffffff; -fx-border-color: #000000;" text="好哒!">
+         <font>
+            <Font size="17.0" />
+         </font>
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </Button>
+      <Ellipse fill="WHITE" layoutX="95.0" layoutY="339.0" radiusX="13.0" radiusY="8.0" stroke="BLACK" strokeType="INSIDE" />
+   </children>
+</Pane>

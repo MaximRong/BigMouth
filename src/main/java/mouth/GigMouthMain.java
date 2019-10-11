@@ -44,8 +44,8 @@ import java.util.concurrent.atomic.AtomicReference;
  */
 public class GigMouthMain extends Application {
 
-    private static final int VIEW_HEIGHT = 100;
-    private static final int VIEW_WIDTH = 100;
+    private static final int VIEW_HEIGHT = 150;
+    private static final int VIEW_WIDTH = 150;
     private TrayIcon trayIcon;
 
     private double xOffSet = 0;
@@ -160,11 +160,33 @@ public class GigMouthMain extends Application {
                 if (db.hasFiles()) {
                     List<File> files = db.getFiles();
                     File file = files.get(0);
-                    // 处理的过场动画
-                    imageView.setImage(new Image("file:C:\\Users\\86186\\Desktop\\牛栏山\\BigMouth\\omnom\\omnom_weiwo.gif"));
+                    String name = file.getName();
+                    if (!"xls".equals(name.split("\\.")[1])) {
+                        file.delete();
+                        imageView.setImage(new Image("file:C:\\Users\\86186\\Desktop\\牛栏山\\BigMouth\\omnom\\omnom_ganga.gif"));
+                        new MessageBox().display(stage, "TEXT", "嗝~");
+                        Task<Void> sleeper = new Task<Void>() {
+                            @Override
+                            protected Void call() {
+                                try {
+                                    Thread.sleep(2400);
+                                } catch (InterruptedException e) {
+                                    e.printStackTrace();
+                                }
+                                return null;
+                            }
+                        };
+                        sleeper.setOnSucceeded(event1 -> {
+                            imageView.setImage(new Image("file:C:\\Users\\86186\\Desktop\\牛栏山\\BigMouth\\omnom\\omnom.gif"));
+                        });
+                        new Thread(sleeper).start();
 
-                    startFileUploadThread(imageView, stage, file);
 
+                    } else {
+                        // 处理的过场动画
+                        imageView.setImage(new Image("file:C:\\Users\\86186\\Desktop\\牛栏山\\BigMouth\\omnom\\omnom_weiwo.gif"));
+                        startFileUploadThread(imageView, stage, file);
+                    }
 
                     success = true;
                 }
@@ -177,10 +199,9 @@ public class GigMouthMain extends Application {
             // 重复次数
             AtomicInteger duplication = new AtomicInteger();
             AtomicBoolean bigger = new AtomicBoolean(false);
-            AtomicBoolean smaller = new AtomicBoolean(false);
 
             pane.setOnMousePressed(event -> {
-                System.out.println("1摇晃的次数是: " + duplication.get());
+//                System.out.println("1摇晃的次数是: " + duplication.get());
                 xOffSet = event.getSceneX();
                 yOffSet = event.getSceneY();
             });
@@ -194,9 +215,9 @@ public class GigMouthMain extends Application {
                 double screenX = event.getScreenX();
                 boolean lastBigger = bigger.get();
 //                System.out.println("当前的点是 " + screenX + ", 之前的点是 " + lastScreenX);
-                if(screenX != lastScreenX.get()) {
+                if (screenX != lastScreenX.get()) {
                     bigger.set(screenX > lastScreenX.get());
-                    if(lastBigger != bigger.get()) {
+                    if (lastBigger != bigger.get()) {
                         duplication.incrementAndGet();
                     }
 
@@ -204,13 +225,13 @@ public class GigMouthMain extends Application {
                 }
                 lastScreenX.set(screenX);
 
-                if(duplication.get() <= 20) {
+                if (duplication.get() <= 20) {
                     stage.setX(screenX - xOffSet);
                     stage.setY(event.getScreenY() - yOffSet);
                 } else {
                     duplication.set(0);
                     // omnom_shengqi.gif
-                    imageView.setImage(new Image("file:C:\\Users\\86186\\Desktop\\牛栏山\\BigMouth\\omnom\\omnom_shengqi.gif"));
+                    imageView.setImage(new Image("file:C:\\Users\\86186\\Desktop\\牛栏山\\BigMouth\\nimo\\nimo_yun.gif"));
                     new MessageBox().display(stage, "TEXT", "老大，求您不要再晃我了，我说还不行嘛...云管家仅新版本已经配置了在线支付功能了哦~");
 
                     Task<Void> sleeper = new Task<Void>() {
