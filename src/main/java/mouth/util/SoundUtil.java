@@ -17,6 +17,13 @@ public class SoundUtil {
         mediaPlayer.play();
     }
 
+    public static void ge() {
+        String soundStr = classPath + "belching.mp3";
+        Media sound = new Media(new File(soundStr).toURI().toString());
+        MediaPlayer mediaPlayer = new MediaPlayer(sound);
+        mediaPlayer.play();
+    }
+
     public static MediaPlayer say() {
         String soundStr = classPath + "say.mp3";
         Media sound = new Media(new File(soundStr).toURI().toString());

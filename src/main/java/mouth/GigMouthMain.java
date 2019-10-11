@@ -20,6 +20,7 @@ import javafx.scene.media.MediaPlayer;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import mouth.util.SoundUtil;
 import mouth.widgets.MessageBox;
 import mouth.widgets.SendTipBox;
 
@@ -164,7 +165,6 @@ public class GigMouthMain extends Application {
                     if (!"xls".equals(name.split("\\.")[1])) {
                         file.delete();
                         imageView.setImage(new Image("file:C:\\Users\\86186\\Desktop\\牛栏山\\BigMouth\\nimo\\nimo_jujue.gif"));
-                        new MessageBox().display(stage, imageView, "TEXT", "嗝~");
                         Task<Void> sleeper = new Task<Void>() {
                             @Override
                             protected Void call() {
@@ -177,8 +177,7 @@ public class GigMouthMain extends Application {
                             }
                         };
                         sleeper.setOnSucceeded(event1 -> {
-//                            imageView.setImage(new Image("file:C:\\Users\\86186\\Desktop\\牛栏山\\BigMouth\\omnom\\omnom.gif"));
-                            Image image = new Image("file:C:\\Users\\86186\\Desktop\\牛栏山\\BigMouth\\nimo\\nimo_kaishi.gif");
+                            new MessageBox().display(stage, imageView, "GE", "嗝~香！");
                         });
                         new Thread(sleeper).start();
 
@@ -226,14 +225,14 @@ public class GigMouthMain extends Application {
                 }
                 lastScreenX.set(screenX);
 
-                if (duplication.get() <= 20) {
+                if (duplication.get() <= 13) {
                     stage.setX(screenX - xOffSet);
                     stage.setY(event.getScreenY() - yOffSet);
                 } else {
                     duplication.set(0);
                     // omnom_shengqi.gif
                     imageView.setImage(new Image("file:C:\\Users\\86186\\Desktop\\牛栏山\\BigMouth\\nimo\\nimo_yun.gif"));
-                    new MessageBox().display(stage, imageView, "YUN", "老大，求您不要再晃我了，我说还不行嘛...云管家仅新版本已经配置了在线支付功能了哦~");
+                    new MessageBox().display(stage, imageView, "YUN", "老大，求您不要再晃我了，我招还不行嘛...云管家新版本已经配置了在线支付功能了哦！");
 
                     Task<Void> sleeper = new Task<Void>() {
                         @Override

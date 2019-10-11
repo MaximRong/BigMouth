@@ -39,6 +39,12 @@ public class MessageBox {
             length += message.origLength();
             content += message.getContent();
             WebViewUtil.show(stage, imageView, html, content, length);
+        } else if ("GE".equals(bisType)) {
+            html = "<span id='content' style='font-size: 20px;'></span>";
+            Message message = MessageUtil.appendMessage("content", result);
+            length += message.origLength();
+            content += message.getContent();
+            WebViewUtil.showGe(stage, imageView, html, content, length);
         } else if ("YUN".equals(bisType)) {
             html = "<span id='content' style='font-size: 20px;'></span>";
             Message message = MessageUtil.appendMessage("content", result);
@@ -52,7 +58,6 @@ public class MessageBox {
             content += message.getContent();
             WebViewUtil.show(stage, imageView, html, content, length);
         }
-
 
 
     }

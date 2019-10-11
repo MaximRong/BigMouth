@@ -51,6 +51,105 @@ public class WebViewUtil {
         return webView(MessageUtil.html(html, content));
     }
 
+    public static void showGe(Stage stage, ImageView imageView, String html, String content, int sayLength) {
+        Platform.runLater(() -> {
+
+            try {
+
+                Stage window = new Stage();
+                window.initStyle(StageStyle.TRANSPARENT);
+                //modality要使用Modality.APPLICATION_MODEL
+                window.initModality(Modality.APPLICATION_MODAL);
+                window.setAlwaysOnTop(true);
+                window.setWidth(390);
+                window.setHeight(349);
+                window.setTitle("怪兽消息");
+                String url = new File(classPath + "pokeBal.png").toURI().toString();
+                window.getIcons().add(new Image(url));
+
+                window.setX(stage.getX() + stage.getWidth() / 2 - window.getWidth() / 2);
+                window.setY(stage.getY() - window.getHeight() + 20);
+
+
+//                String fxml = new File(classPath + "messageBox.fxml").toURI().toString();
+                Pane pane = FXMLLoader.load(new File(classPath + "messageBox.fxml").toURL());
+//                pane.setStyle("-fx-background-color: rgba(0, 100, 100, 0);");
+                Pane webViewPane = (Pane) pane.getChildren().get(0);
+                WebView webView = (WebView) webViewPane.getChildren().get(0);
+                webViewLoad(webView, html, content);
+                SoundUtil.ge();
+                imageView.setImage(new Image("file:C:\\Users\\86186\\Desktop\\牛栏山\\BigMouth\\nimo\\nimo_zhangzui.png"));
+//                Ellipse ellipse = (Ellipse) pane.getChildren().get(1);
+//                ellipse.setStyle("-fx-background-color: rgba(255, 255, 255, 1);");
+//
+//                Ellipse ellipse2 = (Ellipse) pane.getChildren().get(2);
+//                ellipse2.setStyle("-fx-background-color: rgba(255, 255, 255, 1);");
+
+                Button closeBtn = (Button) pane.getChildren().get(3);
+                closeBtn.setOnAction(e -> window.close());
+
+//                imageView.setImage(new Image("file:C:\\Users\\86186\\Desktop\\牛栏山\\BigMouth\\nimo\\nimo_jujue.png"));
+//                MediaPlayer say = SoundUtil.say();
+                int millSecond = 2000;
+                Task<Void> sleeper = new Task<Void>() {
+                    @Override
+                    protected Void call() {
+                        try {
+                            Thread.sleep(millSecond);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        return null;
+                    }
+                };
+                sleeper.setOnSucceeded(event1 -> {
+//                    say.stop();
+                    Image image = new Image("file:C:\\Users\\86186\\Desktop\\牛栏山\\BigMouth\\nimo\\nimo_kaishi.gif");
+                    imageView.setImage(image);
+                });
+                new Thread(sleeper).start();
+
+                /*
+                Button closeBtn = new Button("关闭");
+                closeBtn.setOnAction(e -> window.close());
+
+                WebView webView = webViewLoad(html, content);
+
+                MediaPlayer say = SoundUtil.say();
+                int millSecond = 1200 + 50 * (sayLength - 1);
+                System.out.println(millSecond);
+                Task<Void> sleeper = new Task<Void>() {
+                    @Override
+                    protected Void call() {
+                        try {
+                            Thread.sleep(millSecond);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        return null;
+                    }
+                };
+                sleeper.setOnSucceeded(event1 -> say.stop());
+                new Thread(sleeper).start();
+
+
+                VBox layout = new VBox(10);
+                layout.getChildren().addAll(webView, closeBtn);
+                layout.setAlignment(Pos.CENTER);*/
+
+                Scene scene = new Scene(pane);
+                scene.setFill(null);
+                window.setScene(scene);
+                //使用showAndWait()先处理这个窗口，而如果不处理，main中的那个窗口不能响应
+                window.showAndWait();
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+        });
+    }
+
     public static void showNo(Stage stage, ImageView imageView, String html, String content, int sayLength) {
         Platform.runLater(() -> {
 
